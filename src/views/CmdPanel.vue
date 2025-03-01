@@ -42,7 +42,7 @@ watch(log_queue, () => {
     <div style="padding: 1rem;position: relative;overflow: hidden;">
 
         <div id="cmdLogList" ref="cmdLogList">
-            <n-list hoverable bordered>
+            <n-list hoverable bordered v-show="log_queue.length > 0">
                 <n-list-item v-for="(item, index) in log_queue">
                     <span>
                         {{ index + 1 }}
