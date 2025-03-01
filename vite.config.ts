@@ -15,5 +15,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  base: process.env.NODE_ENV === 'production' ? '/easyrip-webpanel/' : '/', // 添加 base 配置
+  base: process.env.NODE_ENV === 'production' ? '/EasyRip-WebPanel/' : '/', // 添加 base 配置
 })
