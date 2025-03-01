@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      aes-js:
-        specifier: ^3.1.2
-        version: 3.1.2
       axios:
         specifier: ^1.8.1
         version: 1.8.1
@@ -652,9 +649,6 @@ packages:
         optional: true
       vue:
         optional: true
-
-  aes-js@3.1.2:
-    resolution: {integrity: sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==}
 
   alien-signals@1.0.4:
     resolution: {integrity: sha512-DJqqQD3XcsaQcQ1s+iE2jDUZmmQpXwHiR6fCAim/w87luaW+vmLY8fMlrdkmRwzaFXhkxf3rqPCR59tKVv1MDw==}
@@ -1856,8 +1850,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.3
       vue: 3.5.13(typescript@5.7.3)
-
-  aes-js@3.1.2: {}
 
   alien-signals@1.0.4: {}
 

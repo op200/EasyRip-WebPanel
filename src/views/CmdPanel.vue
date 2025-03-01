@@ -1,59 +1,93 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onMounted, watch } from 'vue';
-import { RouterLink, RouterView } from 'vue-router'
-import { NConfigProvider, type GlobalTheme, lightTheme, darkTheme, c } from 'naive-ui'
-import { NFlex, NAffix, NTag, NButton, NSpace, NInput } from 'naive-ui'
-import axios from 'axios';
-import jsSHA from 'jssha';
-import { encrypt, decrypt, testAES } from '@/utils/aes';
+import { ref, watch } from 'vue';
+import { NButton, NSpace, NInputGroup, NInputGroupLabel, NInput, NList, NListItem, NTag, NDataTable } from 'naive-ui';
+import { sendGet, sendPost } from '@/utils/request';
+import { useMainStore } from '@/stores/counter';
+import { storeToRefs } from 'pinia';
 
-function sha3_512(input: string): string {
-    const shaObj = new jsSHA("SHA3-512", "TEXT", { encoding: "UTF8" });
-    shaObj.update(input);
-    return shaObj.getHash("HEX");
+
+const mainStore = useMainStore();
+const { log_queue } = storeToRefs(mainStore);
+
+const new_command = ref('');
+
+function send_new_cmd() {
+    sendPost(new_command.value);
+    new_command.value = '';
+    setTimeout(() => sendGet(), 500);
 }
 
-const text = ref('');
-
-function click1() {
-    console.info('click1');
-    const fetchData = async () => {
-        // try {
-        console.info('click1', 'try');
-        const res = await axios.get('http://127.0.0.1:8000');
-        let data = res.data;
-        const key = sha3_512('123').slice(0, 32);
-        console.warn('key', key);
-
-        console.info('@@data', data);
-        console.warn('@@test', { 'test': data.test });
-        console.error('@@dec', { 'test': decrypt(data.test as string, key) });
-        // }
-        // catch (err) {
-        //     console.error(err);
-        // }
-    };
-
-    fetchData();
+function log_color(level: string | undefined) {
+    return level ? `var(--log-color-${level.toLowerCase()})` : "inherit";
 }
 
-function click2() {
-    testAES();
-}
+const cmdLogList = ref();
+
+function scrollToBottom() {
+    if (cmdLogList.value)
+        cmdLogList.value.scrollTop = cmdLogList.value.scrollHeight;
+};
+
+watch(log_queue, () => {
+    scrollToBottom();
+    setTimeout(() => {
+        scrollToBottom();
+    }, 300);
+});
+
 </script>
 
-<template>
-    <n-button strong secondary type="info" @click="click1">
-        Get
-    </n-button>
 
-    <n-button strong secondary type="info" @click="click2">
-        Test
-    </n-button>
+<template style="overflow: hidden;">
+    <div style="padding: 1rem;position: relative;overflow: hidden;">
 
-    <n-space vertical>
-        <n-input v-model:value="text" type="textarea" placeholder="123asd" />
-    </n-space>
+        <div id="cmdLogList" ref="cmdLogList">
+            <n-list hoverable bordered>
+                <n-list-item v-for="(item, index) in log_queue">
+                    <span>
+                        {{ index + 1 }}
+                    </span>&#8195;
+                    <span style="color: var(--log-color-time);">
+                        {{ item[0] }}
+                    </span>
+                    <span :style="`color:${log_color(item[1])}`">
+                        {{ item[1] !== "Send" ? `&nbsp;[${item[1]}]&nbsp;` : '' }}
+                        {{ (item[2] as string).replace(/ /g, "&nbsp;") }}
+                    </span>
+                </n-list-item>
+            </n-list>
+        </div>
+
+        <div id="cmdSender">
+            <n-space vertical>
+                <n-input-group>
+                    <n-input-group-label style="font-size: 0.8rem;">{{
+                        mainStore.current_work_dir }}></n-input-group-label>
+                    <n-input type="text" placeholder="New Easy Rip command" v-model:value="new_command"
+                        @keydown.enter="send_new_cmd" style="ime-mode: inactive;" />
+                    <n-button strong secondary type="info" @click="send_new_cmd">Send</n-button>
+                </n-input-group>
+            </n-space>
+        </div>
+
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.testButton {
+    position: absolute;
+    top: 0;
+}
+
+#cmdLogList {
+    height: calc(80vh - 0rem - 3px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+#cmdSender {
+    margin-top: 1rem;
+    /* height: calc(20vh - 8rem); */
+}
+</style>

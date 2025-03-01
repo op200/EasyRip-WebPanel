@@ -1,0 +1,89 @@
+import axios from 'axios';
+import { useMainStore } from '@/stores/counter';
+import { sha3_512, AES } from '@/utils/aes';
+
+
+
+function encrypt(plaintext: string): string {
+    const mainStore = useMainStore();
+
+    if (mainStore.current_password === "")
+        return JSON.stringify(plaintext);
+    else
+        return AES.encrypt(JSON.stringify(plaintext), mainStore.current_aes_key);
+}
+
+function decrypt(ciphertextHex: string): string {
+    const mainStore = useMainStore();
+
+    if (mainStore.current_password === "")
+        return JSON.parse(ciphertextHex);
+    else
+        return JSON.parse(AES.decrypt(ciphertextHex, mainStore.current_aes_key));
+}
+
+function init(_token: string) {
+    const mainStore = useMainStore();
+
+    let sha = sha3_512(mainStore.current_password)
+
+    mainStore.current_password_sha3_512_last8 = sha.slice(-8);
+    mainStore.current_aes_key = sha.slice(0, 32);
+    if (mainStore.current_token !== _token) {
+        mainStore.log_queue = [];
+        mainStore.current_token = _token;
+        init(_token);
+    }
+}
+
+/**
+ * 检测是否重新初始化、刷新log
+ */
+export function sendGet() {
+    const mainStore = useMainStore();
+
+    axios.get(mainStore.current_url)
+        .then(res => {
+            let data = res.data;
+            if (mainStore.current_token !== data.token)
+                init(data.token);
+            data.log_queue = decrypt(data.log_queue);
+            data.cwd = decrypt(data.cwd);
+            mainStore.log_queue = data.log_queue;
+            mainStore.current_work_dir = data.cwd;
+
+            if (mainStore.debug)
+                console.debug(data);
+
+            mainStore.is_connect = true;
+            return data;
+        })
+        .catch(err => {
+            console.error(err);
+            mainStore.is_connect = false;
+        })
+}
+
+export function sendPost(cmd: string): boolean {
+    const mainStore = useMainStore();
+
+    axios.post(mainStore.current_url, {
+        'token': mainStore.current_token,
+        'password': mainStore.current_password_sha3_512_last8,
+        'run_command': encrypt(cmd)
+    })
+        .then(res => {
+            if (mainStore.debug)
+                console.debug(res.data)
+
+            if (res.data.res === 'success')
+                return true;
+            else
+                return false;
+        })
+        .catch(err => {
+            console.error(err)
+            return false;
+        })
+    return false;
+}
