@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMainStore } from '@/stores/counter';
+import { useMainStore } from '@/stores/main';
 import { sha3_512, AES } from '@/utils/aes';
 
 
@@ -49,7 +49,8 @@ export function sendGet() {
                 init(data.token);
             data.log_queue = decrypt(data.log_queue);
             data.cwd = decrypt(data.cwd);
-            mainStore.log_queue = data.log_queue;
+            if (mainStore.log_queue.length !== data.log_queue.length)
+                mainStore.log_queue = data.log_queue;
             mainStore.current_work_dir = data.cwd;
 
             if (mainStore.debug)

@@ -4,3 +4,6 @@
   /* font-weight: normal; */
 }
 
+.n-cascader-submenu-wrapper {
+  user-select: none;
+}

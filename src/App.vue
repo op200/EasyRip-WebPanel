@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onUnmounted, h, onMounted, computed, watch } from 'vue';
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { NConfigProvider, lightTheme, darkTheme, zhCN, dateZhCN, enUS, dateEnUS } from 'naive-ui'
-import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NSpace, NInput, NDatePicker } from 'naive-ui'
-import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled } from '@vicons/fluent'
-import { sendGet, sendPost } from '@/utils/request'
-import { useMainStore } from '@/stores/counter';
+import { ref, onBeforeMount, onUnmounted, h, onMounted, watch } from 'vue';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { NConfigProvider, lightTheme, darkTheme, zhCN, dateZhCN, enUS, dateEnUS } from 'naive-ui';
+import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NSpace, NInput, NDatePicker } from 'naive-ui';
+import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled, WindowDevTools24Regular } from '@vicons/fluent';
+import { sendGet } from '@/utils/request';
+import { useMainStore } from '@/stores/main';
 import type { Key } from 'naive-ui/es/cascader/src/interface';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute();
-const mainStore = useMainStore();
 
+const mainStore = useMainStore();
 const { auto_get_interval } = storeToRefs(mainStore);
 
 const currentTheme = ref();
@@ -69,6 +69,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'cmd-panel',
     icon: () => h(Code24Regular),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'generator',
+          }
+        },
+        { default: () => 'Generator' }
+      ),
+    key: 'generator',
+    icon: () => h(WindowDevTools24Regular),
   },
   {
     label: () =>

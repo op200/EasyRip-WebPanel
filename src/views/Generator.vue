@@ -1,0 +1,233 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { NButton, NSpace, NSwitch, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NIcon, NCascader, NSlider } from 'naive-ui';
+import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
+import { useMainStore } from '@/stores/main';
+import { useCmdPanelStore } from '@/stores/cmdPanel';
+import { useGeneratorStore } from '@/stores/generator';
+import { storeToRefs } from 'pinia';
+
+const router = useRouter();
+
+const mainStore = useMainStore();
+const { } = storeToRefs(mainStore);
+
+const cmdPanelStore = useCmdPanelStore();
+const { new_command } = storeToRefs(cmdPanelStore);
+
+const generatorStore = useGeneratorStore();
+const { builded_text, input, output, output_dir, preset, param_name, params, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr } = storeToRefs(generatorStore);
+
+
+const copyText = async () => {
+    try {
+        await navigator.clipboard.writeText(builded_text.value);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+/**
+ * 复制到 cmd panel
+ */
+const copySend = async () => {
+    new_command.value.push(builded_text.value);
+    router.push('/');
+};
+
+
+const preset_options = [
+    {
+        label: 'flac',
+        value: 'flac'
+    },
+    {
+        label: 'x264',
+        value: 'x264',
+        children: [
+            {
+                label: 'slow',
+                value: 'x264slow'
+            }
+        ]
+    },
+    {
+        label: 'x265',
+        value: 'x265',
+        children: [
+            {
+                label: 'fast2',
+                value: 'x265fast2'
+            },
+            {
+                label: 'fast',
+                value: 'x265fast'
+            },
+            {
+                label: 'slow',
+                value: 'x265slow'
+            },
+            {
+                label: 'full',
+                value: 'x265full'
+            }
+        ]
+    }
+];
+
+
+const audio_enc_options = [
+    {
+        label: 'copy',
+        value: 'copy'
+    },
+    {
+        label: 'libopus',
+        value: 'libopus'
+    }
+];
+
+
+const muxer_options = [
+    {
+        label: 'mp4',
+        value: 'mp4'
+    },
+    {
+        label: 'mkv',
+        value: 'mkv'
+    }
+];
+</script>
+
+
+<template>
+    <div style="padding: 1rem;position: relative;overflow-x: hidden;">
+
+        <n-space vertical>
+
+            <n-input-group>
+                <n-input-group-label>
+                    -i
+                </n-input-group-label>
+                <n-input placeholder="Input file pathname" v-model:value="input" />
+                &nbsp;
+                <n-input-group-label>
+                    -o
+                </n-input-group-label>
+                <n-input placeholder="Output file basename prefix" v-model:value="output" />
+                &nbsp;
+                <n-input-group-label>
+                    -o:dir
+                </n-input-group-label>
+                <n-input placeholder="Output file directory" v-model:value="output_dir" />
+            </n-input-group>
+
+            <n-input-group>
+                <n-input-group-label>
+                    -preset
+                </n-input-group-label>
+                <n-cascader placeholder="Preset name" :options="preset_options" @update-value="val => preset = val"
+                    label-field="label" value-field="value" expand-trigger="hover" check-strategy="child"
+                    separator="" />
+                &nbsp;
+                <n-input-group-label>
+                    -c:a
+                </n-input-group-label>
+                <n-cascader placeholder="Audio encoder" @update-value="val => audio_enc = val"
+                    :options="audio_enc_options" label-field="label" value-field="value" expand-trigger="hover"
+                    check-strategy="child" separator="" :clearable="true" />
+                &nbsp;
+                <n-input-group-label>
+                    -muxer
+                </n-input-group-label>
+                <n-cascader placeholder="Muxer" @update-value="val => muxer = val" :options="muxer_options"
+                    label-field="label" value-field="value" expand-trigger="hover" check-strategy="child" separator=""
+                    :clearable="true" />
+            </n-input-group>
+
+            <n-input-group>
+                <n-input-group-label>
+                    -pipe
+                </n-input-group-label>
+                <n-input placeholder="vpy filter file pathname" v-model:value="vpy_filter" />
+                &nbsp;
+                <n-input-group-label>
+                    -sub
+                </n-input-group-label>
+                <n-input placeholder="Subtitle input option" v-model:value="subtitle" />
+            </n-input-group>
+
+            <n-input-group>
+                <n-input-group-label>
+                    -crf
+                </n-input-group-label>
+                <n-input-number placeholder="Video CRF" :value="param_name === 'N/A' ? null : video_crf"
+                    @update-value="val => video_crf = Number(val)" :disabled="param_name === 'N/A'" :min="0" :max="51"
+                    :step="0.5" />
+                &nbsp;
+                <n-slider v-model:value="video_crf" :disabled="param_name === 'N/A'" :marks="{ 0: '0', 51: '51' }"
+                    :min="0" :max="51" :step="0.1" style="padding: 0 1.4rem;font-size: 0.8rem;" />
+            </n-input-group>
+
+            <n-input-group>
+                <n-input-group-label>
+                    -b:a
+                </n-input-group-label>
+                <n-input-number placeholder="Audio bitrate" :value="audio_bitrate_disable ? null : audio_bitrate"
+                    @update-value="val => audio_bitrate = (val as number)" :disabled="audio_bitrate_disable" :min="20"
+                    :step="16">
+                    <template #suffix>
+                        Kbps
+                    </template>
+                </n-input-number>
+                &nbsp;
+                <n-slider v-model:value="audio_bitrate" :disabled="audio_bitrate_disable"
+                    :marks="{ 32: '32k', 64: '64k', 96: '96k', 128: '128k', 192: '192k', 256: '256k', 320: '320k' }"
+                    step="mark" :min="0" :max="320" style="padding: 0 1.4rem;font-size: 0.8rem;" />
+            </n-input-group>
+
+
+            <n-input-group>
+                <n-input-group-label>
+                    {{ param_name }}
+                </n-input-group-label>
+                <n-input
+                    :placeholder="param_name === 'N/A' ? 'Video encoder params override' : param_name.replace(/-/g, ' ').trim() + ' override'"
+                    :disabled="param_name === 'N/A'" v-model:value="params" />
+                &nbsp;
+            </n-input-group>
+
+
+            <n-input-group>
+                <n-input-group-label>
+                    -r
+                </n-input-group-label>
+                <n-input placeholder="Force frame rate" :disabled="muxer == null" v-model:value="muxer_fr">
+                    <template #suffix>
+                        FPS
+                    </template>
+                </n-input>
+                &nbsp;
+            </n-input-group>
+
+
+            <n-input-group>
+                <n-input type="text" :value="builded_text" placeholder="Builded" :disabled="true" />
+                <n-button strong secondary type="info" @click="copyText">
+                    <n-icon size="large">
+                        <Copy24Regular />
+                    </n-icon>
+                </n-button>
+                <n-button strong secondary type="info" @click="copySend">
+                    <n-icon size="large">
+                        <SendCopy24Filled />
+                    </n-icon>
+                </n-button>
+            </n-input-group>
+
+        </n-space>
+
+    </div>
+</template>
