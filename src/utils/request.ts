@@ -47,11 +47,16 @@ export function sendGet() {
             let data = res.data;
             if (mainStore.current_token !== data.token)
                 init(data.token);
-            data.log_queue = decrypt(data.log_queue);
+
             data.cwd = decrypt(data.cwd);
+
+            data.log_queue = decrypt(data.log_queue);
             if (mainStore.log_queue.length !== data.log_queue.length)
                 mainStore.log_queue = data.log_queue;
             mainStore.current_work_dir = data.cwd;
+
+            data.progress = decrypt(data.progress);
+            mainStore.progress = data.progress;
 
             if (mainStore.debug)
                 console.debug(data);

@@ -22,6 +22,8 @@ function send_new_cmd() {
         ++new_command_preview_line.value;
     new_command.value.push("");
     setTimeout(() => sendGet(), 500);
+    setTimeout(() => sendGet(), 1000);
+    setTimeout(() => sendGet(), 1500);
 }
 
 function new_cmd_keydown(event: KeyboardEvent) {

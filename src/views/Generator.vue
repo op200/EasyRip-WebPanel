@@ -256,3 +256,10 @@ const muxer_options = [
 
     </div>
 </template>
+
+
+<style scoped>
+* {
+    margin: auto;
+}
+</style>

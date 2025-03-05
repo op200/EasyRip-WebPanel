@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onUnmounted, h, onMounted, watch } from 'vue';
+import { ref, onBeforeMount, onUnmounted, h, onMounted, watch, computed } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { NConfigProvider, lightTheme, darkTheme, zhCN, dateZhCN, enUS, dateEnUS } from 'naive-ui';
-import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NSpace, NInput, NDatePicker } from 'naive-ui';
+import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NProgress } from 'naive-ui';
 import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled, WindowDevTools24Regular, Info24Regular } from '@vicons/fluent';
 import { sendGet } from '@/utils/request';
 import { useMainStore } from '@/stores/main';
@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia';
 const route = useRoute();
 
 const mainStore = useMainStore();
-const { auto_get_interval } = storeToRefs(mainStore);
+const { progress, auto_get_interval } = storeToRefs(mainStore);
 
 const currentTheme = ref();
 const currentLang = ref({ 'lang': zhCN, 'dateLang': dateZhCN })
@@ -134,6 +134,22 @@ watch(() => route.name, newRouteName => route_name.value = newRouteName);
 
 const collapseMenu = ref(true);
 
+const comput_time_left = computed(() => {
+  if (progress.value['duration'] && progress.value['out_time_us'] && progress.value['speed']) {
+    const seconds = (progress.value['duration'] * 1000_000 - progress.value['out_time_us']) / progress.value['speed'] / 1000_000;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+
+    const formattedHours = hours.toString().padStart(2, "0");
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+    const formattedSeconds = secs.toString().padStart(2, "0");
+
+    return `-${formattedHours}:${formattedMinutes}:${formattedSeconds} |`;
+  }
+  return null;
+})
+
 </script>
 
 <template>
@@ -142,6 +158,13 @@ const collapseMenu = ref(true);
 
       <!-- 顶部按钮栏 -->
       <n-flex id="topButtonBarFlex" justify="end">
+
+        <n-progress v-show="progress['frame_count']" type="line"
+          :percentage="100 * (progress['frame'] || 0) / (progress['frame_count'] || -1)" indicator-placement="inside"
+          indicator-text-color="var(--n-text-color)" processing style="width: 60%;margin: auto;">
+          {{ comput_time_left }}
+          {{ Math.round(100000 * (progress['frame'] || 0) / (progress['frame_count'] || -1)) / 1000 }} %
+        </n-progress>
 
         <n-button strong tertiary circle tag="div" :type="mainStore.is_connect ? 'default' : 'warning'"
           style="cursor: inherit;background-color: transparent;">
