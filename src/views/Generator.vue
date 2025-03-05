@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { NButton, NSpace, NSwitch, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NIcon, NCascader, NSlider } from 'naive-ui';
+import { NButton, NSpace, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NIcon, NCascader, NSlider } from 'naive-ui';
 import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
 import { useMainStore } from '@/stores/main';
 import { useCmdPanelStore } from '@/stores/cmdPanel';
@@ -17,7 +17,7 @@ const cmdPanelStore = useCmdPanelStore();
 const { new_command } = storeToRefs(cmdPanelStore);
 
 const generatorStore = useGeneratorStore();
-const { builded_text, input, output, output_dir, preset, param_name, params, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr } = storeToRefs(generatorStore);
+const { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr, x265_params } = storeToRefs(generatorStore);
 
 
 const copyText = async () => {
@@ -163,11 +163,11 @@ const muxer_options = [
                 <n-input-group-label>
                     -crf
                 </n-input-group-label>
-                <n-input-number placeholder="Video CRF" :value="param_name === 'N/A' ? null : video_crf"
-                    @update-value="val => video_crf = Number(val)" :disabled="param_name === 'N/A'" :min="0" :max="51"
+                <n-input-number placeholder="Video CRF" :value="param_name && video_crf"
+                    @update-value="val => video_crf = Number(val)" :disabled="param_name == null" :min="0" :max="51"
                     :step="0.5" />
                 &nbsp;
-                <n-slider v-model:value="video_crf" :disabled="param_name === 'N/A'" :marks="{ 0: '0', 51: '51' }"
+                <n-slider v-model:value="video_crf" :disabled="param_name == null" :marks="{ 0: '0', 51: '51' }"
                     :min="0" :max="51" :step="0.1" style="padding: 0 1.4rem;font-size: 0.8rem;" />
             </n-input-group>
 
@@ -191,12 +191,38 @@ const muxer_options = [
 
             <n-input-group>
                 <n-input-group-label>
-                    {{ param_name }}
+                    -rd
+                </n-input-group-label>
+                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params.rd" :min="1"
+                    :max="6" :step="1" :validator="x => Number.isInteger(x)" />
+                &nbsp;
+                <n-input-group-label>
+                    -psy-rd
+                </n-input-group-label>
+                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rd']" :min="0"
+                    :max="5" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+                &nbsp;
+                <n-input-group-label>
+                    -rdoq-level
+                </n-input-group-label>
+                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['rdoq-level']"
+                    :min="0" :max="2" :step="1" :validator="x => Number.isInteger(x)" />
+                &nbsp;
+                <n-input-group-label>
+                    -psy-rdoq
+                </n-input-group-label>
+                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rdoq']"
+                    :min="0" :max="50" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+            </n-input-group>
+
+
+            <n-input-group>
+                <n-input-group-label>
+                    {{ param_name || "N/A" }}
                 </n-input-group-label>
                 <n-input
-                    :placeholder="param_name === 'N/A' ? 'Video encoder params override' : param_name.replace(/-/g, ' ').trim() + ' override'"
-                    :disabled="param_name === 'N/A'" v-model:value="params" />
-                &nbsp;
+                    :placeholder="param_name == null ? 'Video encoder params override' : param_name.replace(/-/g, ' ').trim() + ' override'"
+                    :disabled="param_name == null" v-model:value="params_override" />
             </n-input-group>
 
 
@@ -209,7 +235,6 @@ const muxer_options = [
                         FPS
                     </template>
                 </n-input>
-                &nbsp;
             </n-input-group>
 
 

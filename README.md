@@ -13,6 +13,11 @@
 * [Vue Router](https://router.vuejs.org)
 * [Pinia](https://pinia.vuejs.org)
 
+#### UI
+
+* [Naive UI](https://www.naiveui.com)
+* [xicons](https://xicons.org)
+
 #### Crypto
 
 * crypto-js

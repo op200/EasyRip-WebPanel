@@ -9,11 +9,23 @@ export const useGeneratorStore = defineStore('generator', () => {
             subtitle.value ? `-sub ${subtitle.value} ` : "",
             output.value ? `-o ${output.value} ` : "",
             output_dir.value ? `-o:dir ${output_dir.value} ` : "",
+
             preset.value ? `-preset ${preset.value} ` : "",
-            param_name.value !== "N/A" ? `-crf ${video_crf.value} ` : "",
-            param_name.value !== "N/A" && params.value ? `${param_name.value} "${params.value}" ` : "",
+            param_name.value != null ? `-crf ${video_crf.value} ` : "",
+            ...Object.keys(param_name.value === "-x265-params" ?
+                x265_params.value : {})
+                .map(key => {
+                    const value = x265_params.value[key];
+                    if (value != null)
+                        return `-${key} ${value} `;
+                    return null;
+                })
+                .filter(item => item != null),
+            param_name.value != null && params_override.value ? `${param_name.value} "${params_override.value}" ` : "",
+
             audio_enc.value ? `-c:a ${audio_enc.value} ` : "",
             !audio_bitrate_disable.value && audio_bitrate.value ? `-b:a ${audio_bitrate.value} ` : "",
+
             muxer.value ? `-muxer ${muxer.value} ` : "",
             muxer_fr.value ? `-r ${muxer_fr.value} ` : "",
         ].join('')
@@ -28,10 +40,16 @@ export const useGeneratorStore = defineStore('generator', () => {
 
     const preset = ref("");
 
-    const param_name = computed(() => preset.value.startsWith("x264") ? "-x264-params" : preset.value.startsWith("x265") ? "-x265-params" : "N/A");
-    const params = ref("");
+    const param_name = computed(() => preset.value.startsWith("x264") ? "-x264-params" : preset.value.startsWith("x265") ? "-x265-params" : null);
+    const params_override = ref("");
 
     const video_crf = ref(18);
+    const x265_params = ref<Record<string, number | null>>({
+        rd: (null as number | null),
+        'psy-rd': (null as number | null),
+        'rdoq-level': (null as number | null),
+        'psy-rdoq': (null as number | null),
+    });
 
     const audio_enc = ref(null as string | null);
     const audio_bitrate = ref(128);
@@ -43,5 +61,5 @@ export const useGeneratorStore = defineStore('generator', () => {
     const vpy_filter = ref("");
     const subtitle = ref("");
 
-    return { builded_text, input, output, output_dir, preset, param_name, params, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr }
+    return { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr, x265_params }
 })

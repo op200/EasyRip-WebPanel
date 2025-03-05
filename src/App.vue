@@ -3,7 +3,7 @@ import { ref, onBeforeMount, onUnmounted, h, onMounted, watch } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { NConfigProvider, lightTheme, darkTheme, zhCN, dateZhCN, enUS, dateEnUS } from 'naive-ui';
 import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NSpace, NInput, NDatePicker } from 'naive-ui';
-import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled, WindowDevTools24Regular } from '@vicons/fluent';
+import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled, WindowDevTools24Regular, Info24Regular } from '@vicons/fluent';
 import { sendGet } from '@/utils/request';
 import { useMainStore } from '@/stores/main';
 import type { Key } from 'naive-ui/es/cascader/src/interface';
@@ -98,20 +98,6 @@ const menuOptions: MenuOption[] = [
     key: 'connection',
     icon: () => h(BranchForkLink24Regular),
   },
-  // {
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           name: 'log-view',
-  //         }
-  //       },
-  //       { default: () => 'Log' }
-  //     ),
-  //   key: 'log-view',
-  //   icon: () => h(Note24Regular),
-  // },
   {
     label: () =>
       h(
@@ -125,6 +111,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'setting',
     icon: () => h(Settings24Regular)
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'about',
+          }
+        },
+        { default: () => 'About' }
+      ),
+    key: 'about',
+    icon: () => h(Info24Regular)
   },
 ];
 

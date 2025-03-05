@@ -19,14 +19,14 @@ const router = createRouter({
       component: () => import('../views/Connection.vue'),
     },
     {
-      path: '/logview',
-      name: 'log-view',
-      component: () => import('../views/LogView.vue'),
-    },
-    {
       path: '/setting',
       name: 'setting',
       component: () => import('../views/Setting.vue'),
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/About.vue'),
     },
   ],
 })
