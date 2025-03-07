@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { NCard } from 'naive-ui';
-import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
-import { useMainStore } from '@/stores/main';
-import { useCmdPanelStore } from '@/stores/cmdPanel';
-import { useGeneratorStore } from '@/stores/generator';
-import { storeToRefs } from 'pinia';
-
 </script>
 
 
@@ -22,11 +14,13 @@ import { storeToRefs } from 'pinia';
             </template>
 
             <p>
-                运行 easyrip server &lt;地址&gt; &lt;端口&gt; &lt;密码&gt;，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接
+                运行 easyrip server [-a] [&lt;地址&gt;][:][&lt;端口&gt;] [-p] [&lt;密码&gt;]，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接
             </p>
-            <p>
-                e.g. easyrip server "" 8000 123
-            </p>
+            <div>
+                e.g. easyrip server -a 8000 -p 123
+                <br>
+                e.g. easyrip server 0.0.0.0:8000 123
+            </div>
         </n-card>
 
         <n-card title="Easy Rip Web Panel">
