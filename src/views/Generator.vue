@@ -39,13 +39,17 @@ const copySend = async () => {
 
 const preset_options = [
     {
-        label: 'flac',
+        label: 'FLAC',
         value: 'flac'
     },
     {
         label: 'x264',
         value: 'x264',
         children: [
+            {
+                label: 'fast',
+                value: 'x264fast'
+            },
             {
                 label: 'slow',
                 value: 'x264slow'
@@ -56,6 +60,14 @@ const preset_options = [
         label: 'x265',
         value: 'x265',
         children: [
+            {
+                label: 'fast3',
+                value: 'x265fast3'
+            },
+            {
+                label: 'fast4',
+                value: 'x265fast4'
+            },
             {
                 label: 'fast2',
                 value: 'x265fast2'
@@ -73,7 +85,49 @@ const preset_options = [
                 value: 'x265full'
             }
         ]
-    }
+    },
+    {
+        label: 'AMF',
+        value: 'amf',
+        children: [
+            {
+                label: 'AVC',
+                value: 'h264_amf'
+            },
+            {
+                label: 'HEVC',
+                value: 'hevc_amf'
+            }
+        ]
+    },
+    {
+        label: 'NVENC',
+        value: 'nvenc',
+        children: [
+            {
+                label: 'AVC',
+                value: 'h264_nvenc'
+            },
+            {
+                label: 'HEVC',
+                value: 'hevc_nvenc'
+            }
+        ]
+    },
+    {
+        label: 'QSV',
+        value: 'qsv',
+        children: [
+            {
+                label: 'AVC',
+                value: 'h264_qsv'
+            },
+            {
+                label: 'HEVC',
+                value: 'hevc_qsv'
+            }
+        ]
+    },
 ];
 
 
@@ -108,20 +162,26 @@ const muxer_options = [
         <n-space vertical>
 
             <n-input-group>
-                <n-input-group-label>
-                    -i
-                </n-input-group-label>
-                <n-input placeholder="Input file pathname" v-model:value="input" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -i
+                    </n-input-group-label>
+                    <n-input placeholder="Input file pathname" v-model:value="input" />
+                </n-input-group>
                 &nbsp;
-                <n-input-group-label>
-                    -o
-                </n-input-group-label>
-                <n-input placeholder="Output file basename prefix" v-model:value="output" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -o
+                    </n-input-group-label>
+                    <n-input placeholder="Output file basename prefix" v-model:value="output" />
+                </n-input-group>
                 &nbsp;
-                <n-input-group-label>
-                    -o:dir
-                </n-input-group-label>
-                <n-input placeholder="Output file directory" v-model:value="output_dir" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -o:dir
+                    </n-input-group-label>
+                    <n-input placeholder="Output file directory" v-model:value="output_dir" />
+                </n-input-group>
             </n-input-group>
 
             <n-input-group>
@@ -130,7 +190,7 @@ const muxer_options = [
                 </n-input-group-label>
                 <n-cascader placeholder="Preset name" :options="preset_options" @update-value="val => preset = val"
                     label-field="label" value-field="value" expand-trigger="hover" check-strategy="child"
-                    separator="" />
+                    separator=" - " />
                 &nbsp;
                 <n-input-group-label>
                     -c:a
@@ -190,29 +250,38 @@ const muxer_options = [
 
 
             <n-input-group>
-                <n-input-group-label>
-                    -rd
-                </n-input-group-label>
-                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params.rd" :min="1"
-                    :max="6" :step="1" :validator="x => Number.isInteger(x)" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -rd
+                    </n-input-group-label>
+                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params.rd" :min="1"
+                        :max="6" :step="1" :validator="x => Number.isInteger(x)" />
+
+                </n-input-group>
                 &nbsp;
-                <n-input-group-label>
-                    -psy-rd
-                </n-input-group-label>
-                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rd']" :min="0"
-                    :max="5" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -psy-rd
+                    </n-input-group-label>
+                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rd']"
+                        :min="0" :max="5" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+                </n-input-group>
                 &nbsp;
-                <n-input-group-label>
-                    -rdoq-level
-                </n-input-group-label>
-                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['rdoq-level']"
-                    :min="0" :max="2" :step="1" :validator="x => Number.isInteger(x)" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -rdoq-level
+                    </n-input-group-label>
+                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['rdoq-level']"
+                        :min="0" :max="2" :step="1" :validator="x => Number.isInteger(x)" />
+                </n-input-group>
                 &nbsp;
-                <n-input-group-label>
-                    -psy-rdoq
-                </n-input-group-label>
-                <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rdoq']"
-                    :min="0" :max="50" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+                <n-input-group>
+                    <n-input-group-label>
+                        -psy-rdoq
+                    </n-input-group-label>
+                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['psy-rdoq']"
+                        :min="0" :max="50" :step="0.1" :validator="x => Number.isInteger(x * 10)" />
+                </n-input-group>
             </n-input-group>
 
 
@@ -260,6 +329,6 @@ const muxer_options = [
 
 <style scoped>
 * {
-    margin: auto;
+    /* margin: auto; */
 }
 </style>
