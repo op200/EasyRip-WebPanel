@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { NButton, NSpace, NInputGroup, NInputGroupLabel, NInput, NList, NListItem, NTag, NDataTable } from 'naive-ui';
 import { useMainStore } from '@/stores/main';
+import { NInput, NInputGroup, NInputGroupLabel, NSpace } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 
 const mainStore = useMainStore();

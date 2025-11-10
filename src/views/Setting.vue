@@ -1,7 +1,6 @@
 <script setup lang="ts">
-// import { ref } from 'vue';
-import { NSpace, NSwitch, NInputGroup, NInputGroupLabel, NInputNumber } from 'naive-ui';
 import { useMainStore } from '@/stores/main';
+import { NInputGroup, NInputGroupLabel, NInputNumber, NSpace, NSwitch } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 
 const mainStore = useMainStore();

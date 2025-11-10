@@ -1,12 +1,11 @@
 <script setup lang="ts">
-// import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { NButton, NSpace, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NIcon, NCascader, NSlider } from 'naive-ui';
-import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
-import { useMainStore } from '@/stores/main';
 import { useCmdPanelStore } from '@/stores/cmdPanel';
 import { useGeneratorStore } from '@/stores/generator';
+import { useMainStore } from '@/stores/main';
+import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent';
+import { NButton, NCascader, NIcon, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NSlider, NSpace } from 'naive-ui';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -325,10 +324,3 @@ const muxer_options = [
 
     </div>
 </template>
-
-
-<style scoped>
-* {
-    /* margin: auto; */
-}
-</style>

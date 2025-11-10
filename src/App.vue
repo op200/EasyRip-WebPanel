@@ -1,37 +1,26 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onUnmounted, h, onMounted, watch, computed } from 'vue';
-import { RouterLink, RouterView, useRoute } from 'vue-router';
-import { NConfigProvider, lightTheme, darkTheme, zhCN, dateZhCN, enUS, dateEnUS } from 'naive-ui';
-import { NFlex, NMenu, type MenuOption, NLayout, NLayoutSider, NIcon, NButton, NProgress } from 'naive-ui';
-import { DarkTheme24Filled, Code24Regular, BranchForkLink24Regular, LocalLanguage24Filled, ArrowSync24Filled, Settings24Regular, Note24Regular, CellularData124Filled, CellularOff24Filled, WindowDevTools24Regular, Info24Regular } from '@vicons/fluent';
-import { sendGet } from '@/utils/request';
 import { useMainStore } from '@/stores/main';
+import { sendGet } from '@/utils/request';
+import { ArrowSync24Filled, BranchForkLink24Regular, CellularData124Filled, CellularOff24Filled, Code24Regular, DarkTheme24Filled, Info24Regular, LocalLanguage24Filled, Settings24Regular, WindowDevTools24Regular } from '@vicons/fluent';
+import { NButton, NConfigProvider, NFlex, NIcon, NLayout, NLayoutSider, NMenu, NProgress, darkTheme, dateEnUS, dateZhCN, enUS, lightTheme, zhCN, type MenuOption } from 'naive-ui';
 import type { Key } from 'naive-ui/es/cascader/src/interface';
 import { storeToRefs } from 'pinia';
+import { computed, h, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { log } from './utils/log';
 
 const route = useRoute();
 
 const mainStore = useMainStore();
 const { progress, auto_get_interval } = storeToRefs(mainStore);
 
-const currentTheme = ref();
+const currentTheme = ref()
+const css_data_theme = ref<string>()
 const currentLang = ref({ 'lang': zhCN, 'dateLang': dateZhCN })
 
 watch(currentTheme, newVal => {
-  if (newVal.name === 'light') {
-    document.documentElement.style.setProperty('--log-color-time', '#18a058');
-    document.documentElement.style.setProperty('--log-color-info', '#2080f0');
-    document.documentElement.style.setProperty('--log-color-warning', '#f90');
-    document.documentElement.style.setProperty('--log-color-error', '#f03');
-    document.documentElement.style.setProperty('--log-color-send', '#ff69b4');
-  }
-  else {
-    document.documentElement.style.setProperty('--log-color-time', '#63e2b7');
-    document.documentElement.style.setProperty('--log-color-info', '#70c0e8');
-    document.documentElement.style.setProperty('--log-color-warning', '#f2c97d');
-    document.documentElement.style.setProperty('--log-color-error', '#e88080');
-    document.documentElement.style.setProperty('--log-color-send', '#ff69b4');
-  }
+  log.info(currentTheme.value.name)
+  css_data_theme.value = currentTheme.value.name
 })
 
 let auto_get_interval_id: number;
@@ -153,7 +142,8 @@ const comput_time_left = computed(() => {
 </script>
 
 <template>
-  <n-config-provider :theme="currentTheme" :locale="currentLang.lang" :date-locale="currentLang.dateLang">
+  <n-config-provider :theme="currentTheme" :data-theme="css_data_theme" :locale="currentLang.lang"
+    :date-locale="currentLang.dateLang">
     <n-flex id="outermost" vertical style="gap: 0;">
 
       <!-- 顶部按钮栏 -->
@@ -227,6 +217,24 @@ const comput_time_left = computed(() => {
 </template>
 
 <style scoped>
+[data-theme="light"] {
+  --log-color-time: #18a058;
+  --log-color-debug: #18a058;
+  --log-color-info: #2080f0;
+  --log-color-warning: #f90;
+  --log-color-error: #f03;
+  --log-color-send: #ff69b4;
+}
+
+[data-theme="dark"] {
+  --log-color-time: #63e2b7;
+  --log-color-debug: #63e2b7;
+  --log-color-info: #70c0e8;
+  --log-color-warning: #f2c97d;
+  --log-color-error: #e88080;
+  --log-color-send: #ff69b4;
+}
+
 #outermost {
   width: 100vw;
   height: 100vh;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useMainStore } from '@/stores/main';
-import { sha3_512, AES } from '@/utils/aes';
+import { sha3_512, aes } from '@/utils/aes';
 
 
 
@@ -10,7 +10,7 @@ function encrypt(plaintext: string): string {
     if (mainStore.current_password === "")
         return JSON.stringify(plaintext);
     else
-        return AES.encrypt(JSON.stringify(plaintext), mainStore.current_aes_key);
+        return aes.encrypt(JSON.stringify(plaintext), mainStore.current_aes_key);
 }
 
 function decrypt(ciphertextHex: string): string {
@@ -19,7 +19,7 @@ function decrypt(ciphertextHex: string): string {
     if (mainStore.current_password === "")
         return JSON.parse(ciphertextHex);
     else
-        return JSON.parse(AES.decrypt(ciphertextHex, mainStore.current_aes_key));
+        return JSON.parse(aes.decrypt(ciphertextHex, mainStore.current_aes_key));
 }
 
 function init(_token: string) {
@@ -70,7 +70,10 @@ export function sendGet() {
         })
 }
 
-export function sendPost(cmd: string): boolean {
+export function sendPost(cmd: string | undefined): boolean {
+    if (cmd === undefined)
+        return false
+
     const mainStore = useMainStore();
 
     axios.post(mainStore.current_url, {

@@ -4,7 +4,7 @@ import { NCard } from 'naive-ui';
 
 
 <template>
-    <div style="padding: 1rem;position: relative;overflow-x: hidden;">
+    <div style="display: grid;gap: 1rem;padding: 1rem;position: relative;overflow-x: hidden;">
 
         <n-card title="Easy Rip">
             <template #header-extra>
@@ -14,7 +14,7 @@ import { NCard } from 'naive-ui';
             </template>
 
             <p>
-                运行 easyrip server [-a] [&lt;地址&gt;][:][&lt;端口&gt;] [-p] [&lt;密码&gt;]，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接
+                运行 easyrip h server 查看启动服务的语法，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接
             </p>
             <div>
                 e.g. easyrip server -a 8000 -p 123

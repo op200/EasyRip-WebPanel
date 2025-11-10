@@ -16,4 +16,11 @@ export default defineConfig({
     },
   },
   base: process.env.NODE_ENV === 'production' ? '/EasyRip-WebPanel/' : '/', // 添加 base 配置
+
+  build: {
+    target: 'es2020',
+  },
+  esbuild: {
+    target: 'es2020',
+  },
 })

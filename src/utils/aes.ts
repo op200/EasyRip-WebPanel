@@ -8,14 +8,14 @@ export function sha3_512(input: string): string {
     return shaObj.getHash("HEX");
 }
 
-export class AES {
+export namespace aes {
     /**
      * AES 加密函数，返回 UTF-8 的 HEX 格式
      * @param plaintext 明文字符串
      * @param key 密钥字符串（16字节，十六进制格式）
      * @returns 加密后的密文字符串（HEX 格式）
      */
-    static encrypt(plaintext: string, key: string): string {
+    export function encrypt(plaintext: string, key: string): string {
         // 生成随机的16字节IV
         const iv = CryptoJS.lib.WordArray.random(16);
         // 加密
@@ -38,7 +38,7 @@ export class AES {
      * @param key 密钥字符串（16字节，十六进制格式）
      * @returns 解密后的明文字符串
      */
-    static decrypt(ciphertextHex: string, key: string): string {
+    export function decrypt(ciphertextHex: string, key: string): string {
         // 解密
         const bytes = CryptoJS.AES.decrypt(
             CryptoJS.enc.Hex.parse(ciphertextHex.slice(32)).toString(CryptoJS.enc.Base64), // 从密文中提取密文部分
@@ -57,7 +57,7 @@ export class AES {
     /**
      * 测试函数
      */
-    static testAES() {
+    function testAES() {
         // 使用与Python代码相同的密钥（16字节Hex格式）
         const aesKey = "48c8947f69c054a5caa934674ce8881d";
 
@@ -65,11 +65,11 @@ export class AES {
         const test2 = "test 密文测试";
 
         // 加密
-        const encrypted = AES.encrypt(test2, aesKey);
+        const encrypted = aes.encrypt(test2, aesKey);
         console.log(`Encrypted: ${encrypted}`);
 
         // 解密
-        const decrypted = AES.decrypt(encrypted, aesKey);
+        const decrypted = aes.decrypt(encrypted, aesKey);
         console.log(`Decrypted: ${decrypted}`);
     }
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { NButton, NSpace, NInputGroup, NInputGroupLabel, NInput, NList, NListItem, NIcon } from 'naive-ui';
-import { Send24Regular } from '@vicons/fluent'
-import { sendGet, sendPost } from '@/utils/request';
-import { useMainStore } from '@/stores/main';
 import { useCmdPanelStore } from '@/stores/cmdPanel';
+import { useMainStore } from '@/stores/main';
+import { sendGet, sendPost } from '@/utils/request';
+import { Send24Regular } from '@vicons/fluent';
+import { NButton, NIcon, NInput, NInputGroup, NInputGroupLabel, NList, NListItem, NSpace } from 'naive-ui';
 import { storeToRefs } from 'pinia';
+import { onMounted, ref, watch } from 'vue';
 
 
 const mainStore = useMainStore();
@@ -17,7 +17,7 @@ const newCmdInput = ref()
 onMounted(() => newCmdInput.value.focus())
 
 function send_new_cmd() {
-    sendPost(new_command.value[new_command.value.length - 1]);
+    sendPost(new_command.value.at(-1));
     if (new_command_preview_line.value == new_command.value.length - 1)
         ++new_command_preview_line.value;
     new_command.value.push("");
@@ -32,7 +32,7 @@ function new_cmd_keydown(event: KeyboardEvent) {
             event.preventDefault();
             if (new_command_preview_line.value > 0)
                 --new_command_preview_line.value;
-            new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value]
+            new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value] || ""
             break;
         case "ArrowDown":
             event.preventDefault();
@@ -40,7 +40,7 @@ function new_cmd_keydown(event: KeyboardEvent) {
                 new_command_preview_line.value = new_command.value.length - 1,
                     new_command.value[new_command.value.length - 1] = "";
             else if (new_command_preview_line.value < new_command.value.length - 1) ++new_command_preview_line.value;
-            new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value]
+            new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value] || ""
             break;
         case "Enter":
             event.preventDefault();
@@ -48,23 +48,24 @@ function new_cmd_keydown(event: KeyboardEvent) {
     }
 }
 
+
 function log_color(level: string | undefined) {
-    return level ? `var(--log-color-${level.toLowerCase()})` : "inherit";
+    return level ? `var(--log-color-${level.toLowerCase()})` : "inherit"
 }
 
 const cmdLogList = ref();
 
 function scrollToBottom() {
     if (cmdLogList.value)
-        cmdLogList.value.scrollTop = cmdLogList.value.scrollHeight;
-};
+        cmdLogList.value.scrollTop = cmdLogList.value.scrollHeight
+}
 
 watch(log_queue, () => {
-    scrollToBottom();
+    scrollToBottom()
     setTimeout(() => {
-        scrollToBottom();
-    }, 300);
-});
+        scrollToBottom()
+    }, 300)
+})
 
 </script>
 
@@ -77,7 +78,7 @@ watch(log_queue, () => {
                 <n-list-item v-for="(item, index) in log_queue" style="white-space: pre-wrap;">
                     <span>
                         {{ index + 1 }}
-                    </span>&#8195;
+                    </span>&#8195;<!-- 全角空格 -->
                     <span style="color: var(--log-color-time);">
                         {{ item[0] }}
                     </span>
