@@ -5,8 +5,11 @@ export const useGeneratorStore = defineStore('generator', () => {
     const builded_text = computed(() =>
         [
             input.value && input.value !== "fd" ? `-i ${input.value} ` : "",
+
             vpy_filter.value ? `-pipe ${vpy_filter.value} ` : "",
-            subtitle.value ? `-sub ${subtitle.value} ` : "",
+            hard_subtitle.value ? `-sub ${hard_subtitle.value} ` : "",
+            soft_subtitle.value ? `-soft-sub ${soft_subtitle.value} ` : "",
+
             output.value ? `-o ${output.value} ` : "",
             output_dir.value ? `-o:dir ${output_dir.value} ` : "",
 
@@ -59,7 +62,8 @@ export const useGeneratorStore = defineStore('generator', () => {
     const muxer_fr = ref("");
 
     const vpy_filter = ref("");
-    const subtitle = ref("");
+    const hard_subtitle = ref("");
+    const soft_subtitle = ref("");
 
-    return { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, subtitle, muxer, video_crf, muxer_fr, x265_params }
+    return { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, hard_subtitle, soft_subtitle, muxer, video_crf, muxer_fr, x265_params }
 })
