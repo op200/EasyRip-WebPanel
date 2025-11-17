@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useCmdPanelStore } from '@/stores/cmdPanel';
 import { useGeneratorStore } from '@/stores/generator';
 import { useMainStore } from '@/stores/main';
 import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent';
 import { NButton, NCascader, NIcon, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NSlider, NSpace } from 'naive-ui';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
