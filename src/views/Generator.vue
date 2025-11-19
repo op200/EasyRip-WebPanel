@@ -91,16 +91,20 @@ const preset_options = [
         value: 'svtav1'
     },
     {
-        label: 'AMF',
-        value: 'amf',
+        label: 'QSV',
+        value: 'qsv',
         children: [
             {
                 label: 'AVC',
-                value: 'h264_amf'
+                value: 'h264_qsv'
             },
             {
                 label: 'HEVC',
-                value: 'hevc_amf'
+                value: 'hevc_qsv'
+            },
+            {
+                label: 'AV1',
+                value: 'av1_qsv'
             }
         ]
     },
@@ -115,20 +119,28 @@ const preset_options = [
             {
                 label: 'HEVC',
                 value: 'hevc_nvenc'
+            },
+            {
+                label: 'AV1',
+                value: 'av1_nvenc'
             }
         ]
     },
     {
-        label: 'QSV',
-        value: 'qsv',
+        label: 'AMF',
+        value: 'amf',
         children: [
             {
                 label: 'AVC',
-                value: 'h264_qsv'
+                value: 'h264_amf'
             },
             {
                 label: 'HEVC',
-                value: 'hevc_qsv'
+                value: 'hevc_amf'
+            },
+            {
+                label: 'AV1',
+                value: 'av1_amf'
             }
         ]
     },
@@ -210,6 +222,16 @@ const muxer_options = [
                     <n-cascader placeholder="Muxer" @update-value="val => muxer = val" :options="muxer_options"
                         label-field="label" value-field="value" expand-trigger="hover" check-strategy="child"
                         separator="" :clearable="true" />
+                </n-input-group>
+                <n-input-group>
+                    <n-input-group-label>
+                        -r
+                    </n-input-group-label>
+                    <n-input placeholder="Force frame rate" :disabled="muxer == null" v-model:value="muxer_fr">
+                        <template #suffix>
+                            FPS
+                        </template>
+                    </n-input>
                 </n-input-group>
             </div>
 
@@ -309,18 +331,6 @@ const muxer_options = [
 
 
             <n-input-group>
-                <n-input-group-label>
-                    -r
-                </n-input-group-label>
-                <n-input placeholder="Force frame rate" :disabled="muxer == null" v-model:value="muxer_fr">
-                    <template #suffix>
-                        FPS
-                    </template>
-                </n-input>
-            </n-input-group>
-
-
-            <n-input-group>
                 <n-input type="text" :value="builded_text" placeholder="Builded" :disabled="true" />
                 <n-button strong secondary type="info" @click="copyText">
                     <n-icon size="large">
@@ -344,5 +354,9 @@ const muxer_options = [
     display: flex;
     justify-content: space-between;
     gap: 0.2rem;
+
+    >.n-input-group {
+        justify-content: center;
+    }
 }
 </style>

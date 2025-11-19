@@ -1,4 +1,7 @@
 export namespace log {
+    export function log(...data: any[]): void {
+        console.log(...data)
+    }
     export function debug(...data: any[]): void {
         console.debug(...data)
     }

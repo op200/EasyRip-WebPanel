@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCmdPanelStore } from '@/stores/cmdPanel';
 import { useMainStore } from '@/stores/main';
+import { log } from '@/utils/log';
 import { sendGet, sendPost } from '@/utils/request';
 import { Send24Regular } from '@vicons/fluent';
 import { NButton, NIcon, NInput, NInputGroup, NInputGroupLabel, NList, NListItem, NSpace } from 'naive-ui';
@@ -61,12 +62,12 @@ function scrollToBottom() {
 }
 
 watch(log_queue, () => {
+    log.log(log_queue.value)
     scrollToBottom()
     setTimeout(() => {
         scrollToBottom()
     }, 300)
 })
-
 </script>
 
 
@@ -76,14 +77,14 @@ watch(log_queue, () => {
         <div id="cmdLogList" ref="cmdLogList">
             <n-list hoverable bordered v-show="log_queue.length > 0">
                 <n-list-item v-for="(item, index) in log_queue" style="white-space: pre-wrap;">
-                    <span>
+                    <span class="msg-num">
                         {{ index + 1 }}
                     </span>&#8195;<!-- 全角空格 -->
                     <span style="color: var(--log-color-time);">
                         {{ item[0] }}
                     </span>
-                    <span :style="`color:${log_color(item[1])}`">
-                        {{ item[1] !== "Send" ? ` [${item[1]}] ` : '' }}{{ item[2] }}
+                    <span class="msg-container" :style="`color:${log_color(item[1])}`">
+                        {{ item[1] === "Send" ? item[2] : ` [${item[1]}] ${item[2]}` }}
                     </span>
                 </n-list-item>
             </n-list>
@@ -119,5 +120,14 @@ watch(log_queue, () => {
 #cmdSender {
     margin-top: 1rem;
     /* height: calc(20vh - 8rem); */
+}
+
+.msg-num {
+    vertical-align: top;
+}
+
+.msg-container {
+    display: inline-block;
+    line-height: 0.9rem;
 }
 </style>
