@@ -13,14 +13,11 @@ import { NCard } from 'naive-ui';
                 </a>
             </template>
 
-            <p>
-                运行 easyrip h server 查看启动服务的语法，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接
-            </p>
-            <div>
-                e.g. easyrip server -a 8000 -p 123
-                <br>
-                e.g. easyrip server 0.0.0.0:8000 123
-            </div>
+            <p>Run 'easyrip help server' to view the syntax for starting the service, and then set the corresponding
+                value in
+                the
+                Connection of Web Panel to connect.</p>
+            <p>运行 'easyrip help server' 查看启动服务的语法，然后在 Web Panel 的 Connection 中设置相应的值，就可以连接。</p>
         </n-card>
 
         <n-card title="Easy Rip Web Panel">
