@@ -27,8 +27,7 @@ const { debug, auto_get_interval } = storeToRefs(mainStore);
             <n-input-group>
                 <n-input-group-label>自动刷新轮询间隔</n-input-group-label>
                 <!-- 设定了最小值，所以直接断言类型 -->
-                <n-input-number :value="auto_get_interval" @update-value="val => auto_get_interval = (val as number)"
-                    :update-value-on-input="false" step="1000" :min="500">
+                <n-input-number v-model:value="auto_get_interval" :update-value-on-input="false" step="1000" :min="200">
                     <template #suffix>
                         ms
                     </template>

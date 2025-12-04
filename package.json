@@ -1,6 +1,6 @@
 {
   "name": "easyrip-webpanel",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,7 +16,7 @@
     "jssha": "^3.3.1",
     "naive-ui": "^2.43.2",
     "pinia": "^3.0.4",
-    "vue": "^3.5.24",
+    "vue": "^3.5.25",
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
@@ -29,8 +29,8 @@
     "@vue/tsconfig": "^0.8.1",
     "npm-run-all2": "^8.0.4",
     "typescript": "~5.9.3",
-    "vite": "^7.2.2",
+    "vite": "^7.2.6",
     "vite-plugin-vue-devtools": "^8.0.5",
-    "vue-tsc": "^3.1.4"
+    "vue-tsc": "^3.1.5"
   }
 }

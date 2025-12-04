@@ -54,10 +54,10 @@ export function sendGet() {
             data.log_queue = JSON.parse(decrypt(data.log_queue))
             if (mainStore.log_queue.length !== data.log_queue.length)
                 mainStore.log_queue = data.log_queue
-            mainStore.current_work_dir = data.cwd
+            mainStore.current_work_dir = JSON.parse(data.cwd)
 
             data.progress = decrypt(data.progress)
-            mainStore.progress = data.progress
+            mainStore.progress = JSON.parse(data.progress)
 
             if (mainStore.debug)
                 console.debug(data)

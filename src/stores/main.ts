@@ -8,7 +8,7 @@ export const useMainStore = defineStore('main', () => {
   const is_connect = ref(true);
   const progress = ref({} as Record<string, number>);
 
-  const auto_get_interval = ref(15_000);
+  const auto_get_interval = ref(1_500);
   const current_work_dir = ref('');
 
   const current_password = ref('123');
