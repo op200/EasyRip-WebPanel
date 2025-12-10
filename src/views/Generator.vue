@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import { useCmdPanelStore } from '@/stores/cmdPanel';
-import { useGeneratorStore } from '@/stores/generator';
-import { useMainStore } from '@/stores/main';
-import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent';
-import { NButton, NCascader, NIcon, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NSlider, NSpace } from 'naive-ui';
-import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useCmdPanelStore } from '@/stores/cmdPanel'
+import { useGeneratorStore } from '@/stores/generator'
+import { useMainStore } from '@/stores/main'
+import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
+import { NButton, NCascader, NIcon, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NSlider, NSpace } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
-const mainStore = useMainStore();
-const { } = storeToRefs(mainStore);
+const mainStore = useMainStore()
+const { } = storeToRefs(mainStore)
 
-const cmdPanelStore = useCmdPanelStore();
-const { new_command } = storeToRefs(cmdPanelStore);
+const cmdPanelStore = useCmdPanelStore()
+const { new_command } = storeToRefs(cmdPanelStore)
 
-const generatorStore = useGeneratorStore();
-const { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, hard_subtitle, soft_subtitle, muxer, video_crf, muxer_fr, x265_params } = storeToRefs(generatorStore);
+const generatorStore = useGeneratorStore()
+const { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, hard_subtitle, soft_subtitle, muxer, video_crf, muxer_fr, x265_params } = storeToRefs(generatorStore)
 
 
 const copyText = async () => {
     try {
-        await navigator.clipboard.writeText(builded_text.value);
+        await navigator.clipboard.writeText(builded_text.value)
     } catch (err) {
-        console.error(err);
+        console.error(err)
     }
-};
+}
 
 /**
  * 复制到 cmd panel
  */
 const copySend = async () => {
-    new_command.value.push(builded_text.value);
-    router.push('/');
-};
+    await new_command.value.push(builded_text.value)
+    router.push('/')
+}
 
 
 const preset_options = [

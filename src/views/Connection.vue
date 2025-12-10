@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { useMainStore } from '@/stores/main';
-import { NInput, NInputGroup, NInputGroupLabel, NSpace } from 'naive-ui';
-import { storeToRefs } from 'pinia';
+import { useMainStore } from '@/stores/main'
+import request from '@/utils/request'
+import { NInput, NInputGroup, NInputGroupLabel, NSpace } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { watch } from 'vue'
 
-const mainStore = useMainStore();
-const { current_password, current_url } = storeToRefs(mainStore);
+const mainStore = useMainStore()
+const { current_password, current_url } = storeToRefs(mainStore)
+
+watch(current_password, request.init)
 
 </script>
 

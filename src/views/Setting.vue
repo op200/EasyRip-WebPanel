@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useMainStore } from '@/stores/main';
-import { NInputGroup, NInputGroupLabel, NInputNumber, NSpace, NSwitch } from 'naive-ui';
-import { storeToRefs } from 'pinia';
+import { useMainStore } from '@/stores/main'
+import { NInputGroup, NInputGroupLabel, NInputNumber, NSpace, NSwitch } from 'naive-ui'
+import { storeToRefs } from 'pinia'
 
-const mainStore = useMainStore();
-const { debug, auto_get_interval } = storeToRefs(mainStore);
+const mainStore = useMainStore()
+const { debug, auto_get_interval } = storeToRefs(mainStore)
 
 
 </script>

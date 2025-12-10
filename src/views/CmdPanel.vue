@@ -1,51 +1,50 @@
 <script setup lang="ts">
-import { useCmdPanelStore } from '@/stores/cmdPanel';
-import { useMainStore } from '@/stores/main';
-import { log } from '@/utils/log';
-import { sendGet, sendPost } from '@/utils/request';
-import { Send24Regular } from '@vicons/fluent';
-import { NButton, NIcon, NInput, NInputGroup, NInputGroupLabel, NList, NListItem, NSpace } from 'naive-ui';
-import { storeToRefs } from 'pinia';
-import { onMounted, ref, watch } from 'vue';
+import { useCmdPanelStore } from '@/stores/cmdPanel'
+import { useMainStore } from '@/stores/main'
+import { sendGet, sendPost } from '@/utils/request'
+import { Send24Regular } from '@vicons/fluent'
+import { NButton, NIcon, NInput, NInputGroup, NInputGroupLabel, NList, NListItem, NSpace } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { onMounted, ref, watch } from 'vue'
 
 
-const mainStore = useMainStore();
-const { log_queue } = storeToRefs(mainStore);
-const cmdPanelStore = useCmdPanelStore();
-const { new_command, new_command_preview_line } = storeToRefs(cmdPanelStore);
+const mainStore = useMainStore()
+const { log_queue } = storeToRefs(mainStore)
+const cmdPanelStore = useCmdPanelStore()
+const { new_command, new_command_preview_line } = storeToRefs(cmdPanelStore)
 
 const newCmdInput = ref()
 onMounted(() => newCmdInput.value.focus())
 
 function send_new_cmd() {
-    sendPost(new_command.value.at(-1));
+    sendPost(new_command.value.at(-1))
     if (new_command_preview_line.value == new_command.value.length - 1)
-        ++new_command_preview_line.value;
-    new_command.value.push("");
-    setTimeout(() => sendGet(), 500);
-    setTimeout(() => sendGet(), 1000);
-    setTimeout(() => sendGet(), 1500);
+        ++new_command_preview_line.value
+    new_command.value.push("")
+    setTimeout(() => sendGet(), 500)
+    setTimeout(() => sendGet(), 1000)
+    setTimeout(() => sendGet(), 1500)
 }
 
 function new_cmd_keydown(event: KeyboardEvent) {
     switch (event.key) {
         case "ArrowUp":
-            event.preventDefault();
+            event.preventDefault()
             if (new_command_preview_line.value > 0)
-                --new_command_preview_line.value;
+                --new_command_preview_line.value
             new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value] || ""
-            break;
+            break
         case "ArrowDown":
             event.preventDefault();
             if (new_command_preview_line.value == new_command.value.length - 2)
                 new_command_preview_line.value = new_command.value.length - 1,
-                    new_command.value[new_command.value.length - 1] = "";
+                    new_command.value[new_command.value.length - 1] = ""
             else if (new_command_preview_line.value < new_command.value.length - 1) ++new_command_preview_line.value;
             new_command.value[new_command.value.length - 1] = new_command.value[new_command_preview_line.value] || ""
-            break;
+            break
         case "Enter":
             event.preventDefault();
-            send_new_cmd();
+            send_new_cmd()
     }
 }
 
@@ -54,7 +53,7 @@ function log_color(level: string | undefined) {
     return level ? `var(--log-color-${level.toLowerCase()})` : "inherit"
 }
 
-const cmdLogList = ref();
+const cmdLogList = ref()
 
 function scrollToBottom() {
     if (cmdLogList.value)
@@ -62,7 +61,6 @@ function scrollToBottom() {
 }
 
 watch(log_queue, () => {
-    log.log(log_queue.value)
     scrollToBottom()
     setTimeout(() => {
         scrollToBottom()

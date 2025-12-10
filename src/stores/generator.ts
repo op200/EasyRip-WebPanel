@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 export const useGeneratorStore = defineStore('generator', () => {
     const builded_text = computed(() =>
@@ -20,8 +20,8 @@ export const useGeneratorStore = defineStore('generator', () => {
                 .map(key => {
                     const value = x265_params.value[key];
                     if (value != null)
-                        return `-${key} ${value} `;
-                    return null;
+                        return `-${key} ${value} `
+                    return null
                 })
                 .filter(item => item != null),
             param_name.value != null && params_override.value ? `${param_name.value} "${params_override.value}" ` : "",
@@ -35,13 +35,13 @@ export const useGeneratorStore = defineStore('generator', () => {
     );
 
 
-    const input = ref("");
+    const input = ref("")
 
-    const output = ref("");
+    const output = ref("")
 
-    const output_dir = ref("");
+    const output_dir = ref("")
 
-    const preset = ref("");
+    const preset = ref("")
 
     const param_name = computed(() =>
         preset.value.startsWith("x264") ? "-x264-params" :
@@ -49,7 +49,7 @@ export const useGeneratorStore = defineStore('generator', () => {
                 preset.value.startsWith("svtav1") ? "-svtav1-params" :
                     preset.value.endsWith("qsv") ? "-qsv_params" :
                         null);
-    const params_override = ref("");
+    const params_override = ref("")
 
     const video_crf = ref(18);
     const x265_params = ref<Record<string, number | null>>({
@@ -59,16 +59,16 @@ export const useGeneratorStore = defineStore('generator', () => {
         'psy-rdoq': (null as number | null),
     });
 
-    const audio_enc = ref(null as string | null);
-    const audio_bitrate = ref(128);
-    const audio_bitrate_disable = computed(() => audio_enc.value == null || audio_enc.value === 'copy');
+    const audio_enc = ref(null as string | null)
+    const audio_bitrate = ref(128)
+    const audio_bitrate_disable = computed(() => audio_enc.value == null || audio_enc.value === 'copy')
 
-    const muxer = ref(null as string | null);
-    const muxer_fr = ref("");
+    const muxer = ref(null as string | null)
+    const muxer_fr = ref("")
 
-    const vpy_filter = ref("");
-    const hard_subtitle = ref("");
-    const soft_subtitle = ref("");
+    const vpy_filter = ref("")
+    const hard_subtitle = ref("")
+    const soft_subtitle = ref("")
 
     return { builded_text, input, output, output_dir, preset, param_name, params_override, audio_enc, audio_bitrate, audio_bitrate_disable, vpy_filter, hard_subtitle, soft_subtitle, muxer, video_crf, muxer_fr, x265_params }
 })

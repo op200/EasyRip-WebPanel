@@ -1,12 +1,11 @@
-import axios from 'axios';
 import { useMainStore } from '@/stores/main';
-import { sha3_512, aes } from '@/utils/aes';
-import { log } from './log';
+import { aes, sha3_512 } from '@/utils/aes';
+import axios from 'axios';
 
 
 
 function encrypt(plaintext: string): string {
-    const mainStore = useMainStore();
+    const mainStore = useMainStore()
 
     if (mainStore.current_password === "")
         return plaintext
@@ -96,4 +95,8 @@ export function sendPost(cmd: string | undefined): boolean {
             return false;
         })
     return false;
+}
+
+export default {
+    init, sendGet, sendPost
 }
