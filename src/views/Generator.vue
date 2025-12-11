@@ -39,6 +39,10 @@ const copySend = async () => {
 
 const preset_options = [
     {
+        label: 'Copy',
+        value: 'copy'
+    },
+    {
         label: 'FLAC',
         value: 'flac'
     },
@@ -144,31 +148,37 @@ const preset_options = [
             }
         ]
     },
-];
+]
 
 
 const audio_enc_options = [
     {
-        label: 'copy',
+        label: 'Copy',
         value: 'copy'
     },
     {
         label: 'libopus',
         value: 'libopus'
-    }
-];
+    },
+    {
+        label: 'FLAC',
+        value: 'flac'
+    },
+]
 
 
 const muxer_options = [
     {
-        label: 'mp4',
+        label: 'MP4',
         value: 'mp4'
     },
     {
-        label: 'mkv',
+        label: 'MKV',
         value: 'mkv'
     }
-];
+]
+
+const is_video_not_transcoding = computed(() => new Set([null, '-qsv_params']).has(param_name.value as any))
 </script>
 
 
@@ -205,7 +215,7 @@ const muxer_options = [
                     </n-input-group-label>
                     <n-cascader placeholder="Preset name" :options="preset_options" @update-value="val => preset = val"
                         label-field="label" value-field="value" expand-trigger="hover" check-strategy="child"
-                        separator=" - " />
+                        separator=" - " :clearable="true" />
                 </n-input-group>
                 <n-input-group>
                     <n-input-group-label>
@@ -240,21 +250,22 @@ const muxer_options = [
                     <n-input-group-label>
                         -pipe
                     </n-input-group-label>
-                    <n-input placeholder="vpy filter file pathname" v-model:value="vpy_filter" />
+                    <n-input placeholder="vpy filter file pathname" v-model:value="vpy_filter"
+                        :disabled="is_video_not_transcoding" />
                 </n-input-group>
                 <n-input-group>
                     <n-input-group-label>
                         -sub
                     </n-input-group-label>
                     <n-input placeholder="Burned-in subtitle" v-model:value="hard_subtitle"
-                        :disabled="computed(() => Boolean(soft_subtitle)).value" />
+                        :disabled="computed(() => Boolean(soft_subtitle)).value || is_video_not_transcoding" />
                 </n-input-group>
                 <n-input-group>
                     <n-input-group-label>
                         -soft-sub
                     </n-input-group-label>
                     <n-input placeholder="Soft subtitle" v-model:value="soft_subtitle"
-                        :disabled="computed(() => Boolean(hard_subtitle)).value" />
+                        :disabled="computed(() => Boolean(hard_subtitle)).value || is_video_not_transcoding" />
                 </n-input-group>
             </div>
 
@@ -263,10 +274,10 @@ const muxer_options = [
                     -crf
                 </n-input-group-label>
                 <n-input-number placeholder="Video CRF" :value="param_name && video_crf"
-                    @update-value="val => video_crf = Number(val)" :disabled="param_name == null" :min="0" :max="51"
-                    :step="0.5" />
+                    @update-value="val => video_crf = Number(val)" :disabled="is_video_not_transcoding" :min="0"
+                    :max="51" :step="0.5" />
                 &nbsp;
-                <n-slider v-model:value="video_crf" :disabled="param_name == null" :marks="{ 0: '0', 51: '51' }"
+                <n-slider v-model:value="video_crf" :disabled="is_video_not_transcoding" :marks="{ 0: '0', 51: '51' }"
                     :min="0" :max="51" :step="0.1" style="padding: 0 1.4rem;font-size: 0.8rem;" />
             </n-input-group>
 
@@ -293,7 +304,7 @@ const muxer_options = [
                     <n-input-group-label>
                         -rd
                     </n-input-group-label>
-                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params.rd" :min="1"
+                    <n-input-number :disabled="param_name !== '-x265-params'" v-model:value="x265_params['rd']" :min="1"
                         :max="6" :step="1" :validator="x => Number.isInteger(x)" />
                 </n-input-group>
                 <n-input-group>

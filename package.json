@@ -1,6 +1,6 @@
 {
   "name": "easyrip-webpanel",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -23,7 +23,7 @@
     "@tsconfig/node22": "^22.0.5",
     "@types/aes-js": "^3.1.4",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^24.10.2",
+    "@types/node": "^25.0.0",
     "@vicons/fluent": "^0.13.0",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",

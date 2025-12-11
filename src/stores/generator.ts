@@ -41,14 +41,15 @@ export const useGeneratorStore = defineStore('generator', () => {
 
     const output_dir = ref("")
 
-    const preset = ref("")
+    const preset = ref(null as string | null)
 
     const param_name = computed(() =>
-        preset.value.startsWith("x264") ? "-x264-params" :
-            preset.value.startsWith("x265") ? "-x265-params" :
-                preset.value.startsWith("svtav1") ? "-svtav1-params" :
-                    preset.value.endsWith("qsv") ? "-qsv_params" :
-                        null);
+        preset.value === null ? null :
+            preset.value.startsWith("x264") ? "-x264-params" :
+                preset.value.startsWith("x265") ? "-x265-params" :
+                    preset.value.startsWith("svtav1") ? "-svtav1-params" :
+                        preset.value.endsWith("qsv") ? "-qsv_params" :
+                            null);
     const params_override = ref("")
 
     const video_crf = ref(18);
