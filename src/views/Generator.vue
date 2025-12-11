@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCmdPanelStore } from '@/stores/cmdPanel'
 import { useGeneratorStore } from '@/stores/generator'
-import { useMainStore } from '@/stores/main'
 import { Copy24Regular, SendCopy24Filled } from '@vicons/fluent'
 import { NButton, NCascader, NIcon, NInput, NInputGroup, NInputGroupLabel, NInputNumber, NSlider, NSpace } from 'naive-ui'
 import { storeToRefs } from 'pinia'
@@ -9,9 +8,6 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
-const mainStore = useMainStore()
-const { } = storeToRefs(mainStore)
 
 const cmdPanelStore = useCmdPanelStore()
 const { new_command } = storeToRefs(cmdPanelStore)
@@ -93,6 +89,10 @@ const preset_options = [
     {
         label: 'SVT-AV1',
         value: 'svtav1'
+    },
+    {
+        label: 'VVenC',
+        value: 'vvenc'
     },
     {
         label: 'QSV',

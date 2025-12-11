@@ -25,21 +25,22 @@ watch(currentTheme, newVal => {
 
 let auto_get_interval_id: number;
 onBeforeMount(() => {
-  currentTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme;
-  window.matchMedia('(prefers-color-scheme: dark)')
+  currentTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
     .addEventListener('change', () =>
-      currentTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme); // 监听系统主题
+      currentTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme) // 监听系统主题
 });
 
 onMounted(() => {
-  auto_get_interval_id = setInterval(() => sendGet(), auto_get_interval.value);
-  sendGet();
+  auto_get_interval_id = setInterval(sendGet, auto_get_interval.value)
+  sendGet()
 })
 
 
 watch(auto_get_interval, () => {
-  clearInterval(auto_get_interval_id);
-  auto_get_interval_id = setInterval(() => sendGet(), auto_get_interval.value);
+  clearInterval(auto_get_interval_id)
+  auto_get_interval_id = setInterval(sendGet, auto_get_interval.value)
 });
 
 onUnmounted(() => clearInterval(auto_get_interval_id))
