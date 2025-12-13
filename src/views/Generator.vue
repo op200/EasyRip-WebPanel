@@ -35,64 +35,80 @@ const copySend = async () => {
 
 const preset_options = [
     {
-        label: 'Copy',
-        value: 'copy'
+        label: 'Custom',
+        value: 'custom',
+    },
+    {
+        label: 'Subset',
+        value: 'subset',
     },
     {
         label: 'FLAC',
-        value: 'flac'
+        value: 'flac',
+    },
+    {
+        label: 'Copy',
+        value: 'copy',
     },
     {
         label: 'x264',
-        value: 'x264',
+        value: '_x264',
         children: [
             {
+                label: 'No preset',
+                value: 'x264',
+            },
+            {
                 label: 'fast',
-                value: 'x264fast'
+                value: 'x264fast',
             },
             {
                 label: 'slow',
-                value: 'x264slow'
-            }
-        ]
+                value: 'x264slow',
+            },
+        ],
     },
     {
         label: 'x265',
-        value: 'x265',
+        value: '_x265',
         children: [
             {
+                label: 'No preset',
+                value: 'x265',
+            },
+            {
                 label: 'fast4',
-                value: 'x265fast4'
+                value: 'x265fast4',
             },
             {
                 label: 'fast3',
-                value: 'x265fast3'
+                value: 'x265fast3',
             },
             {
                 label: 'fast2',
-                value: 'x265fast2'
+                value: 'x265fast2',
             },
             {
                 label: 'fast',
-                value: 'x265fast'
+                value: 'x265fast',
             },
             {
                 label: 'slow',
-                value: 'x265slow'
+                value: 'x265slow',
             },
             {
                 label: 'full',
-                value: 'x265full'
-            }
-        ]
+                value: 'x265full',
+            },
+        ],
     },
     {
         label: 'SVT-AV1',
-        value: 'svtav1'
+        value: 'svtav1',
     },
     {
         label: 'VVenC',
-        value: 'vvenc'
+        value: 'vvenc',
     },
     {
         label: 'QSV',
@@ -100,17 +116,17 @@ const preset_options = [
         children: [
             {
                 label: 'AVC',
-                value: 'h264_qsv'
+                value: 'h264_qsv',
             },
             {
                 label: 'HEVC',
-                value: 'hevc_qsv'
+                value: 'hevc_qsv',
             },
             {
                 label: 'AV1',
-                value: 'av1_qsv'
-            }
-        ]
+                value: 'av1_qsv',
+            },
+        ],
     },
     {
         label: 'NVENC',
@@ -118,17 +134,17 @@ const preset_options = [
         children: [
             {
                 label: 'AVC',
-                value: 'h264_nvenc'
+                value: 'h264_nvenc',
             },
             {
                 label: 'HEVC',
-                value: 'hevc_nvenc'
+                value: 'hevc_nvenc',
             },
             {
                 label: 'AV1',
-                value: 'av1_nvenc'
-            }
-        ]
+                value: 'av1_nvenc',
+            },
+        ],
     },
     {
         label: 'AMF',
@@ -136,17 +152,17 @@ const preset_options = [
         children: [
             {
                 label: 'AVC',
-                value: 'h264_amf'
+                value: 'h264_amf',
             },
             {
                 label: 'HEVC',
-                value: 'hevc_amf'
+                value: 'hevc_amf',
             },
             {
                 label: 'AV1',
-                value: 'av1_amf'
-            }
-        ]
+                value: 'av1_amf',
+            },
+        ],
     },
 ]
 
@@ -154,15 +170,15 @@ const preset_options = [
 const audio_enc_options = [
     {
         label: 'Copy',
-        value: 'copy'
+        value: 'copy',
     },
     {
         label: 'libopus',
-        value: 'libopus'
+        value: 'libopus',
     },
     {
         label: 'FLAC',
-        value: 'flac'
+        value: 'flac',
     },
 ]
 
