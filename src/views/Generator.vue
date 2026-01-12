@@ -111,6 +111,10 @@ const preset_options = [
         value: 'vvenc',
     },
     {
+        label: 'FFV1',
+        value: 'ffv1',
+    },
+    {
         label: 'QSV',
         value: 'qsv',
         children: [
